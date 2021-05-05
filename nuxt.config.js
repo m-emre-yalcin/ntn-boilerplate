@@ -7,6 +7,7 @@ import * as SITE_INFO from './content/site/info.json'
 import {
   COLOR_MODE_FALLBACK
 } from './utils/globals.js'
+import ampify from './plugins/ampify'
 
 export default {
   target: 'static',
@@ -69,7 +70,8 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['@/assets/css/main.pcss'],
+  // for AMP compatibility css files moved to the layout files
+  css: [],
   /*
    ** Plugins to load before mounting the App
    */
@@ -81,15 +83,32 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxt/content', 'nuxt-purgecss', '@nuxtjs/amp'],
-  amp: {
-    origin: 'https://optimistic-babbage-8d8e19.netlify.app' || 'http://localhost:3000'
+  modules: ['@nuxt/content', 'nuxt-purgecss'],
+  /*
+  ** Hooks configuration
+  */
+  hooks: {
+    // This hook is called before saving the html to flat file
+    'generate:page': (page) => {
+      if (/^\/amp\//gi.test(page.route)) {
+        page.html = ampify(page.html)
+      }
+    },
+    // This hook is called before serving the html to the browser
+    'render:route': (url, page, { req, res }) => {
+      if (/^\/amp\//gi.test(url)) {
+        page.html = ampify(page.html)
+      }
+    }
   },
+  // amp: {
+  //   origin: 'https://optimistic-babbage-8d8e19.netlify.app' || 'http://localhost:3000'
+  // },
   /*
    ** Build configuration
    */
   build: {
-    extractCSS: true,
+    extractCSS: false,
     postcss: {
       plugins: {
         'postcss-import': postcssImport,
