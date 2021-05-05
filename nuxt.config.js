@@ -25,18 +25,16 @@ export default {
    */
   head: {
     title: SITE_INFO.sitename || process.env.npm_package_name || '',
-    meta: [{
-      charset: 'utf-8'
-    },
-    {
-      name: 'viewport',
-      content: 'width=device-width, initial-scale=1'
-    },
-    {
-      hid: 'description',
-      name: 'description',
-      content: SITE_INFO.sitedescription || process.env.npm_package_description || ''
-    }
+    meta: [
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: SITE_INFO.sitedescription || process.env.npm_package_description || ''
+      }
     ],
     link: [{
       rel: 'preconnect',
@@ -52,12 +50,9 @@ export default {
       rel: 'stylesheet',
       href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap',
       media: 'print',
-      onload: `this.media='all'`
+      // onload: `this.media='all'`
     }
     ], // ? Imports the font 'Inter', can be optimized by the netlify plugin 'Subfont' by uncommenting it in `netlify.toml`
-    noscript: [{
-      innerHTML: '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">'
-    }],
     script: [
       {
         src: '@/content/schema/data.js'
@@ -88,7 +83,7 @@ export default {
    */
   modules: ['@nuxt/content', 'nuxt-purgecss', '@nuxtjs/amp'],
   amp: {
-    origin: 'https://optimistic-babbage-8d8e19.netlify.app/' || 'http://localhost:3000'
+    origin: 'https://optimistic-babbage-8d8e19.netlify.app' || 'http://localhost:3000'
   },
   /*
    ** Build configuration
