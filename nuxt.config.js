@@ -11,6 +11,7 @@ import ampify from './plugins/ampify'
 
 export default {
   target: 'static',
+  ssr: false,
   components: true,
   generate: {
     fallback: true
@@ -26,16 +27,15 @@ export default {
    */
   head: {
     title: SITE_INFO.sitename || process.env.npm_package_name || '',
-    meta: [
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1'
-      },
-      {
-        hid: 'description',
-        name: 'description',
-        content: SITE_INFO.sitedescription || process.env.npm_package_description || ''
-      }
+    meta: [{
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1'
+    },
+    {
+      hid: 'description',
+      name: 'description',
+      content: SITE_INFO.sitedescription || process.env.npm_package_description || ''
+    }
     ],
     link: [{
       rel: 'preconnect',
@@ -54,11 +54,6 @@ export default {
       // onload: `this.media='all'`
     }
     ], // ? Imports the font 'Inter', can be optimized by the netlify plugin 'Subfont' by uncommenting it in `netlify.toml`
-    script: [
-      {
-        src: '@/content/schema/data.js'
-      }
-    ],
     __dangerouslyDisableSanitizers: ['noscript']
   },
   /*
@@ -83,32 +78,15 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxt/content', 'nuxt-purgecss'],
-  /*
-  ** Hooks configuration
-  */
-  hooks: {
-    // This hook is called before saving the html to flat file
-    'generate:page': (page) => {
-      if (/^\/amp\//gi.test(page.route)) {
-        page.html = ampify(page.html)
-      }
-    },
-    // This hook is called before serving the html to the browser
-    'render:route': (url, page, { req, res }) => {
-      if (/^\/amp\//gi.test(url)) {
-        page.html = ampify(page.html)
-      }
-    }
+  modules: ['@nuxt/content', 'nuxt-purgecss', '@nuxtjs/amp'],
+  amp: {
+    origin: process.env.NODE_ENV === 'production' ? 'https://optimistic-babbage-8d8e19.netlify.app' : 'http://localhost:3000',
   },
-  // amp: {
-  //   origin: 'https://optimistic-babbage-8d8e19.netlify.app' || 'http://localhost:3000'
-  // },
   /*
    ** Build configuration
    */
   build: {
-    extractCSS: false,
+    extractCSS: true,
     postcss: {
       plugins: {
         'postcss-import': postcssImport,

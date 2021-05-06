@@ -6,6 +6,6 @@
   </div>
 </template>
 
-<style>
+<style amp-custom="">
 @import '../assets/css/main.pcss';
 </style>
