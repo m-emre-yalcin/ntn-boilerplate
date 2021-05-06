@@ -11,7 +11,7 @@ import {
 
 export default {
   target: 'static',
-  ssr: false,
+  ssr: true,
   components: true,
   generate: {
     fallback: true
@@ -88,11 +88,15 @@ export default {
   hooks: {
     // This hook is called before saving the html to flat file
     'generate:page': (page) => {
-      page.html = page.html.replace(/<html/gi, '<html ⚡')
+      if (/^\/amp\//gi.test(page.route)) {
+        page.html = page.html.replace(/<html/gi, '<html ⚡')
+      }
     },
     // This hook is called before serving the html to the browser
     'render:route': (url, page, { req, res }) => {
-      page.html = page.html.replace(/<html/gi, '<html ⚡')
+      if (/^\/amp\//gi.test(url)) {
+        page.html = page.html.replace(/<html/gi, '<html ⚡')
+      }
     }
   },
   /*
