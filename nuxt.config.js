@@ -88,15 +88,11 @@ export default {
   hooks: {
     // This hook is called before saving the html to flat file
     'generate:page': (page) => {
-      if (/^\/amp\//gi.test(page.route)) {
-        page.html = page.html.replace(/<html/gi, '<html ⚡')
-      }
+      page.html = page.html.replace(/<html/gi, '<html ⚡')
     },
     // This hook is called before serving the html to the browser
     'render:route': (url, page, { req, res }) => {
-      if (/^\/amp\//gi.test(url)) {
-        page.html = page.html.replace(/<html/gi, '<html ⚡')
-      }
+      page.html = page.html.replace(/<html/gi, '<html ⚡')
     }
   },
   /*
