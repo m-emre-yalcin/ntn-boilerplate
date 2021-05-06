@@ -7,7 +7,7 @@ import * as SITE_INFO from './content/site/info.json'
 import {
   COLOR_MODE_FALLBACK
 } from './utils/globals.js'
-import ampify from './plugins/ampify'
+// import ampify from './plugins/ampify'
 
 export default {
   target: 'static',
@@ -70,7 +70,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/vue-content-placeholders.js'],
+  plugins: ['~/plugins/vue-content-placeholders.js', '~/plugins/jsonld.js'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -81,6 +81,23 @@ export default {
   modules: ['@nuxt/content', 'nuxt-purgecss', '@nuxtjs/amp'],
   amp: {
     origin: process.env.NODE_ENV === 'production' ? 'https://optimistic-babbage-8d8e19.netlify.app' : 'http://localhost:3000',
+  },
+  /*
+  ** Hooks configuration
+  */
+  hooks: {
+    // This hook is called before saving the html to flat file
+    'generate:page': (page) => {
+      if (/^\/amp\//gi.test(page.route)) {
+        page.html = page.html.replace(/<html/gi, '<html ⚡')
+      }
+    },
+    // This hook is called before serving the html to the browser
+    'render:route': (url, page, { req, res }) => {
+      if (/^\/amp\//gi.test(url)) {
+        page.html = page.html.replace(/<html/gi, '<html ⚡')
+      }
+    }
   },
   /*
    ** Build configuration
